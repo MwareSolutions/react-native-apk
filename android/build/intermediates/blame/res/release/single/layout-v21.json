@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "/Users/sanderkerstens/Downloads/Development/APPS_RN/mware.rn.tvapp/node_modules/react-native-apk/android/build/intermediates/res/merged/release/layout-v21/notification_template_icon_group.xml",
+        "source": "/Users/sanderkerstens/.gradle/caches/transforms-2/files-2.1/e05ff65ef8b26927e929918d7761c5dd/res/layout-v21/notification_template_icon_group.xml"
+    },
+    {
+        "merged": "/Users/sanderkerstens/Downloads/Development/APPS_RN/mware.rn.tvapp/node_modules/react-native-apk/android/build/intermediates/res/merged/release/layout-v21/notification_action_tombstone.xml",
+        "source": "/Users/sanderkerstens/.gradle/caches/transforms-2/files-2.1/e05ff65ef8b26927e929918d7761c5dd/res/layout-v21/notification_action_tombstone.xml"
+    },
+    {
+        "merged": "/Users/sanderkerstens/Downloads/Development/APPS_RN/mware.rn.tvapp/node_modules/react-native-apk/android/build/intermediates/res/merged/release/layout-v21/notification_template_custom_big.xml",
+        "source": "/Users/sanderkerstens/.gradle/caches/transforms-2/files-2.1/e05ff65ef8b26927e929918d7761c5dd/res/layout-v21/notification_template_custom_big.xml"
+    },
+    {
+        "merged": "/Users/sanderkerstens/Downloads/Development/APPS_RN/mware.rn.tvapp/node_modules/react-native-apk/android/build/intermediates/res/merged/release/layout-v21/notification_action.xml",
+        "source": "/Users/sanderkerstens/.gradle/caches/transforms-2/files-2.1/e05ff65ef8b26927e929918d7761c5dd/res/layout-v21/notification_action.xml"
+    }
+]
