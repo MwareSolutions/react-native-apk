@@ -9,7 +9,6 @@ import android.os.Build;
 import android.os.Binder;
 import androidx.core.content.FileProvider;
 
-import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
@@ -17,7 +16,11 @@ import com.facebook.react.bridge.Callback;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 import java.io.File;
+
+import javax.annotation.Nullable;
 
 public class ReactNativeAPKModule extends ReactContextBaseJavaModule {
 
@@ -32,46 +35,35 @@ public class ReactNativeAPKModule extends ReactContextBaseJavaModule {
   public String getName() {
     return "ReactNativeAPK";
   }
-  @ReactMethod
-  public void isAppInstalled(String packageId, Promise p) { p.resolve(isAppInstalledSync(packageId)); }
 
   @ReactMethod
-  public boolean isAppInstalledSync(String packageId) {
+  public void isAppInstalled(String packageName, Callback cb) {
     try {
-      PackageInfo pInfo = this.reactContext.getPackageManager().getPackageInfo(packageId,PackageManager.GET_ACTIVITIES);
-     return true;
+      PackageInfo pInfo = this.reactContext.getPackageManager().getPackageInfo(packageName,
+          PackageManager.GET_ACTIVITIES);
+
+      cb.invoke(true);
     } catch (PackageManager.NameNotFoundException e) {
-      return false;
+      cb.invoke(false);
     }
   }
 
   @ReactMethod
   public void installApp(String packagePath) {
     File toInstall = new File(packagePath);
-    toInstall.setReadable(true, false);
-    if (Build.VERSION.SDK_INT >= 24) {
+     if (Build.VERSION.SDK_INT >= 24) {
       String callingPackageName = this.reactContext.getPackageManager().getNameForUid(Binder.getCallingUid());
       Uri apkUri = FileProvider.getUriForFile(this.reactContext, callingPackageName+".fileprovider", toInstall);
-      //Intent intent = new Intent(Intent.ACTION_INSTALL_PACKAGE);
-      Intent intent = new Intent(Intent.ACTION_VIEW);
-      intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-      intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-      //intent.setFlags(Intent.ACTION_INSTALL_PACKAGE);
+      Intent intent = new Intent(Intent.ACTION_INSTALL_PACKAGE);
+      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
       intent.setData(apkUri);
-      Intent chooserIntent = Intent.createChooser(intent, "Open With");
-      chooserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-      this.reactContext.startActivity(chooserIntent);
-    } else {
+      intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+      this.reactContext.startActivity(intent);
+     } else {
       Uri apkUri = Uri.fromFile(toInstall);
-//
-//      Intent intent = new Intent(Intent.ACTION_VIEW);
-//      intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//      intent.setDataAndType(apkUri, "application/vnd.android.package-archive");
-//      this.reactContext.startActivity(intent);
-
       Intent intent = new Intent(Intent.ACTION_VIEW);
       intent.setDataAndType(apkUri, "application/vnd.android.package-archive");
-      intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
       this.reactContext.startActivity(intent);
     }
   }
