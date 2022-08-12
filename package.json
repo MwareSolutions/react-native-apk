@@ -1,5 +1,5 @@
 {
-  "main": "index.js",
+  "main": "index",
   "license": "MIT",
   "name": "react-native-apk",
   "author": "SkyzohKey <skyzohkey@protonmail.com>",
