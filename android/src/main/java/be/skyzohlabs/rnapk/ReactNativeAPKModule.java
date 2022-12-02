@@ -15,6 +15,7 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Callback;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
@@ -49,17 +50,24 @@ public class ReactNativeAPKModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
+  public boolean verifyInstallerId() {
+    List<String> validInstallers = new ArrayList<>(Arrays.asList("com.android.vending", "com.google.android.feedback"));
+    final String installer = this.reactContext.getPackageManager().getInstallerPackageName(this.reactContext.getPackageName());
+    return installer != null && validInstallers.contains(installer);
+  }
+
+  @ReactMethod
   public void installApp(String packagePath) {
     File toInstall = new File(packagePath);
-     if (Build.VERSION.SDK_INT >= 24) {
+    if (Build.VERSION.SDK_INT >= 24) {
       String callingPackageName = this.reactContext.getPackageManager().getNameForUid(Binder.getCallingUid());
-      Uri apkUri = FileProvider.getUriForFile(this.reactContext, callingPackageName+".fileprovider", toInstall);
+      Uri apkUri = FileProvider.getUriForFile(this.reactContext, callingPackageName + ".fileprovider", toInstall);
       Intent intent = new Intent(Intent.ACTION_INSTALL_PACKAGE);
       intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
       intent.setData(apkUri);
       intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
       this.reactContext.startActivity(intent);
-     } else {
+    } else {
       Uri apkUri = Uri.fromFile(toInstall);
       Intent intent = new Intent(Intent.ACTION_VIEW);
       intent.setDataAndType(apkUri, "application/vnd.android.package-archive");
@@ -115,16 +123,18 @@ public class ReactNativeAPKModule extends ReactContextBaseJavaModule {
   public void runApp(String packageName) {
     // TODO: Allow to pass Extra's from react.
     Intent launchIntent = this.reactContext.getPackageManager().getLaunchIntentForPackage(packageName);
-    //launchIntent.putExtra("test", "12331");
+    // launchIntent.putExtra("test", "12331");
     this.reactContext.startActivity(launchIntent);
   }
 
-  /*@Override
-  public @Nullable Map<String, Object> getConstants() {
-      Map<String, Object> constants = new HashMap<>();
-  
-      constants.put("getApps", getApps());
-      constants.put("getNonSystemApps", getNonSystemApps());
-      return constants;
-  }*/
+  /*
+   * @Override
+   * public @Nullable Map<String, Object> getConstants() {
+   * Map<String, Object> constants = new HashMap<>();
+   * 
+   * constants.put("getApps", getApps());
+   * constants.put("getNonSystemApps", getNonSystemApps());
+   * return constants;
+   * }
+   */
 }
