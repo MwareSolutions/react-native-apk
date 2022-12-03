@@ -50,10 +50,17 @@ public class ReactNativeAPKModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public boolean verifyInstallerId() {
+  public boolean installedViaAppStore() {
     List<String> validInstallers = new ArrayList<>(Arrays.asList("com.android.vending", "com.google.android.feedback"));
-    final String installer = this.reactContext.getPackageManager().getInstallerPackageName(this.reactContext.getPackageName());
-    return installer != null && validInstallers.contains(installer);
+    final String packageNameAuto = this.reactContext.getPackageName();
+    final String installer = this.reactContext.getPackageManager().getInstallerPackageName(packageNameAuto);
+    if (installer == null) {
+      return false;
+    } else if (validInstallers.contains(installer)) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   @ReactMethod

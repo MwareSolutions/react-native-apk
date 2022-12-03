@@ -36,6 +36,11 @@ var rnApk = {
     return RNAPK.getNonSystemApps();
   },
 
+
+  installedViaAppStore: function() {
+    return RNAPK.installedViaAppStore();
+  },
+
   /**
    * Install an application to the device.
    *
